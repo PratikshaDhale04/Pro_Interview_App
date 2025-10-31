@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Progress</title>
+    <link rel="stylesheet" href="ad.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            color: #080808;
+        }
+
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            color: #333;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2em;
+        }
+
+        .student-details {
+            margin-bottom: 20px;
+            text-align: left;
+            display: inline-block;
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .student-details p {
+            margin: 5px 0;
+            font-weight: bold;
+        }
+
+        .progress-section {
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background: linear-gradient(90deg, #201b1b 0%, #bbb 100%);
+            border-radius: 10px;
+            overflow: hidden;
+            height: 30px;
+            margin: 10px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+
+        .tests-list {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .tests-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tests-list li {
+            background: linear-gradient(45deg, #a8edea 0%, #fed6e3 100%);
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .graph-container {
+            margin-top: 20px;
+            text-align: center;
+            background: rgba(136, 125, 125, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        canvas {
+            border: 2px solid #ff6b6b;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .back-home {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: rgb(19, 18, 18);
+            padding: 8px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            z-index: 10;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .back-home:hover {
+            background: linear-gradient(45deg, #4ecdc4, #ff6b6b);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Home Button on Left -->
+    <a href="main.html" class="back-home">Back to Home</a>
+
+    <div class="container">
+        <h2>Student Progress</h2>
+
+        <div class="student-details">
+            <h3>Student Details</h3>
+            <p><strong>Name:</strong> <span id="student-name">N/A</span></p>
+            <p><strong>Email:</strong> <span id="student-email">N/A</span></p>
+            <p><strong>Phone:</strong> <span id="student-phone">N/A</span></p>
+            <p><strong>Course:</strong> <span id="student-course">N/A</span></p>
+        </div>
+
+        <div class="progress-section">
+            <h3>Mock Interview Progress</h3>
+            <p><strong>Total Tests Given:</strong> <span id="total-tests">0</span></p>
+            <p><strong>Average Score:</strong> <span id="average-score">0%</span></p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="tests-list">
+            <h3>Tests Given</h3>
+            <ul id="tests-ul">
+                <li>No tests taken yet.</li>
+            </ul>
+        </div>
+
+        <div class="graph-container">
+            <h3>Progress Graph</h3>
+            <canvas id="progressChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <script>
+        function loadProgress() {
+            // Load student details from localStorage
+            document.getElementById('student-name').innerText = localStorage.getItem('name') || 'N/A';
+            document.getElementById('student-email').innerText = localStorage.getItem('email') || 'N/A';
+            document.getElementById('student-phone').innerText = localStorage.getItem('phone') || 'N/A';
+            document.getElementById('student-course').innerText = localStorage.getItem('selectedCourse') || 'N/A';
+
+            // Load mock interview data (assuming stored as JSON array in localStorage)
+            let mockInterviews = JSON.parse(localStorage.getItem('mockInterviews')) || [];
+            let totalTests = mockInterviews.length;
+            document.getElementById('total-tests').innerText = totalTests;
+
+            let testsUl = document.getElementById('tests-ul');
+            testsUl.innerHTML = '';
+
+            if (totalTests > 0) {
+                let totalScore = 0;
+                let scores = [];
+                mockInterviews.forEach((test, index) => {
+                    totalScore += test.score || 0;
+                    scores.push(test.score || 0);
+                    let li = document.createElement('li');
+                    li.innerText = `Test ${index + 1}: Date - ${test.date || 'N/A'}, Score - ${test.score || 0}%`;
+                    testsUl.appendChild(li);
+                });
+                let averageScore = Math.round(totalScore / totalTests);
+                document.getElementById('average-score').innerText = averageScore + '%';
+                document.getElementById('progress-fill').style.width = averageScore + '%';
+
+                // Draw graph
+                drawGraph(scores);
+            } else {
+                let li = document.createElement('li');
+                li.innerText = 'No tests taken yet.';
+                testsUl.appendChild(li);
+                document.getElementById('average-score').innerText = '0%';
+                document.getElementById('progress-fill').style.width = '0%';
+            }
+        }
+
+        function drawGraph(scores) {
+            const canvas = document.getElementById('progressChart');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 40;
+            const graphWidth = width - 2 * padding;
+            const graphHeight = height - 2 * padding;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw axes
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, height - padding);
+            ctx.lineTo(width - padding, height - padding);
+            ctx.stroke();
+
+            // Draw labels with visible text color
+            ctx.fillStyle = '#000'; // Black color for visibility
+            ctx.fillText('Tests', width / 2, height - 10);
+            ctx.save();
+            ctx.translate(10, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Score (%)', 0, 0);
+            ctx.restore();
+
+            if (scores.length > 0) {
+                const maxScore = 100;
+                const stepX = graphWidth / (scores.length - 1 || 1);
+                const stepY = graphHeight / maxScore;
+
+                ctx.beginPath();
+                ctx.moveTo(padding, height - padding - scores[0] * stepY);
+                for (let i = 1; i < scores.length; i++) {
+                    ctx.lineTo(padding + i * stepX, height - padding - scores[i] * stepY);
+                }
+                ctx.strokeStyle = '#4caf50';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Draw points
+                ctx.fillStyle = '#4caf50';
+                scores.forEach((score, i) => {
+                    const x = padding + i * stepX;
+                    const y = height - padding - score * stepY;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                });
+            }
+        }
+
+        window.onload = loadProgress;
+    </script>
+</body>
+</html>

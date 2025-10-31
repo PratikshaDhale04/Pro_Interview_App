@@ -1,0 +1,183 @@
+
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('../Images/2.jpg') no-repeat center center/cover;
+    color: white;
+}
+
+.container {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 400px;
+    transition: opacity 0.5s ease;
+}
+
+.container.hidden {
+    display: none;
+}
+
+h2 {
+    margin-bottom: 15px;
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+select, input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #2980b9;
+}
+
+.back-home {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #555;
+    color: white;
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    z-index: 10;
+}
+
+.back-home:hover {
+    background-color: #333;
+}
+
+/* Progress Container Styles */
+#progressContainer {
+    width: 80%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+#progressContainer h2 {
+    color: #333;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.student-details {
+    margin-bottom: 20px;
+    text-align: left;
+    display: inline-block;
+    background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+}
+
+.student-details p {
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.progress-section {
+    margin-top: 20px;
+}
+
+.progress-bar {
+    width: 100%;
+    background: linear-gradient(90deg, #ddd 0%, #bbb 100%);
+    border-radius: 10px;
+    overflow: hidden;
+    height: 30px;
+    margin: 10px 0;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+    width: 0%;
+    transition: width 1s ease-in-out;
+}
+
+.tests-list {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.tests-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tests-list li {
+    background: linear-gradient(45deg, #a8edea 0%, #fed6e3 100%);
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    color: #333;
+    font-weight: bold;
+}
+
+.graph-container {
+    margin-top: 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+canvas {
+    border: 2px solid #ff6b6b;
+    background: white;
+    border-radius: 10px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .container {
+        width: 90%;
+    }
+    #progressContainer {
+        width: 95%;
+    }
+}

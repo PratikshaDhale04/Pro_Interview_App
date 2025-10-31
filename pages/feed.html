@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Feedback</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('../Images/4.jpg') no-repeat center center/cover;
+            color: black;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 350px;
+        }
+        h2, p {
+            margin-bottom: 15px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            background: rgba(125, 124, 124, 0.2);
+            color: rgb(93, 85, 85);
+            resize: none;
+        }
+        textarea:focus {
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #86a0e3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: black;
+        }
+
+        .back-home {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #555;
+            color: white;
+            padding: 6px 12px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            z-index: 10;
+        }
+
+        .back-home:hover {
+            background-color: #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Home Button on Left -->
+    <a href="main.html" class="back-home">Back to Home</a>
+
+    <div class="container">
+        <h2>Interview Feedback</h2>
+        <p>Your responses have been analyzed. Here is your feedback:</p>
+        <textarea id="feedback" readonly>Your interview performance was strong. Consider improving your response time.</textarea>
+        <button onclick="finishInterview()">Finish</button>
+    </div>
+
+    <script>
+        function finishInterview() {
+            alert("Thank you for using the interview platform. Good luck!");
+            // window.location.href = ".html";  
+        }
+    </script>
+
+</body>
+</html>

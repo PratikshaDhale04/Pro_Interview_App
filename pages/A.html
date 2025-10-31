@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professional Interview App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2c3e50;
+            padding: 15px 20px;
+            color: white;
+            position: relative;
+            z-index: 10;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+        .nav-links li {
+            margin: 0 10px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 8px 12px;
+            transition: 0.3s;
+        }
+        .nav-links a:hover {
+            background: #34495e;
+            border-radius: 5px;
+        }
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+            /* display: ; */
+            color: white;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 50%;
+            background-color: #34495e;
+            padding-top: 60px;
+            transition: 0.3s;
+            z-index: 20;
+        }
+        .sidebar a {
+            padding: 15px 20px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #2c3e50;
+        }
+        .sidebar-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Tagline */
+        .tagline-container {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 20px;
+            background: #27ae60;
+            color: white;
+            margin-top: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Slider */
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin: 20px 0;
+        }
+        .slider {
+            display: flex;
+            width: 300%;
+            animation: slide 15s infinite ease-in-out;
+        }
+        .slide {
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .slide img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        @keyframes slide {
+            0%, 100% { transform: translateX(0); }
+            33% { transform: translateX(-100%); }
+            66% { transform: translateX(-200%); }
+        }
+
+        .back-home {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #555;
+            color: white;
+            padding: 6px 12px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            z-index: 30;
+        }
+
+        .back-home:hover {
+            background-color: #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                background: #2c3e50;
+                top: 60px;
+                right: 0;
+                width: 200px;
+                border-radius: 5px;
+                box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            }
+            .nav-links li {
+                text-align: center;
+                margin: 0;
+            }
+            .nav-links.show {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Home Button on Left -->
+    <a href="main.html" class="back-home">Back to Home</a>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <span class="sidebar-close-btn" onclick="closeSidebar()">×</span>
+        <a href="profile.html">Profile</a>
+        <a href="progress.html">Progress</a>
+        <a href="term.html">Terms & Conditions</a>
+        <a href="#" onclick="signOut()">Sign Out</a>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="menu-icon" onclick="toggleSidebar()">☰</div>
+        <ul class="nav-links">
+            <li><a href="A.html">Home</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="lo.html">Login</a></li>
+            <li><a href="company.html">Company</a></li>
+            <li><a href="setup.html">Setup</a></li>
+            <li><a href="mock.html">Mock Interview</a></li>
+            <li><a href="feed.html">Feedback</a></li>
+        </ul>
+    </nav>
+
+   
+    <div class="tagline-container">
+        Turn <span style="color: yellow;">Nerves</span> into <span style="color: yellow;">Confidence</span>, 
+        Dreams into <span style="color: yellow;">Reality</span>.
+    </div>
+
+    <!-- Image Slider
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide">
+                <img src="A1.jpg" alt="Career Growth" />
+            </div>
+            <div class="slide">
+                <img src="A2.jpg" alt="Interview Preparation" />
+            </div>
+            <div class="slide">
+                <img src="A3.jpg" alt="Job Success" />
+            </div>
+        </div>
+     </div> -->
+    <script>
+        // Open Sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').style.left = '0';
+        }
+
+        // Close Sidebar
+        function closeSidebar() {
+            document.getElementById('sidebar').style.left = '-250px';
+        } 
+
+        //Toggle Navbar Menu (For Mobile)
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('show');
+        }
+
+     
+        function signOut() {
+            alert("Signing Out...");
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>

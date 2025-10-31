@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 350px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .course-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .course-item {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .course-item:hover {
+            background: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .selected-course {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 15px;
+        }
+
+        .back-home {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #555;
+            color: white;
+            padding: 6px 12px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            z-index: 10;
+        }
+
+        .back-home:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Home Button on Left -->
+    <a href="main.html" class="back-home">Back to Home</a>
+
+    <div class="container" id="course-selection">
+        <h2>Select a Course</h2>
+        <ul class="course-list">
+            <li class="course-item" onclick="selectCourse('B.Tech')">B.Tech</li>
+            <li class="course-item" onclick="selectCourse('BBA')">BBA</li>
+            <li class="course-item" onclick="selectCourse('BCA')">BCA</li>
+            <li class="course-item" onclick="selectCourse('MBA')">MBA</li>
+            <li class="course-item" onclick="selectCourse('M.Tech')">M.Tech</li>
+            <li class="course-item" onclick="selectCourse('MCA')">MCA</li>
+            <li class="course-item" onclick="selectCourse('Diploma')">Diploma</li>
+        </ul>
+        <p class="selected-course hidden" id="selected-course-text"></p>
+    </div>
+
+    <script>
+        function selectCourse(course) {
+            localStorage.setItem('selectedCourse', course);
+            document.getElementById('selected-course-text').innerText = "Selected Course: " + course;
+            document.getElementById('selected-course-text').classList.remove('hidden');
+        }
+
+        window.onload = function() {
+            let savedCourse = localStorage.getItem('selectedCourse');
+            if (savedCourse) {
+                document.getElementById('selected-course-text').innerText = "Selected Course: " + savedCourse;
+                document.getElementById('selected-course-text').classList.remove('hidden');
+            }
+        };
+    </script>
+</body>
+</html>

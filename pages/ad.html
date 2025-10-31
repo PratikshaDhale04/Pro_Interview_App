@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Interview Experience</title>
+    <link rel="stylesheet" href="ad.css">
+</head>
+<body>
+    <!-- Back to Home Button on Left -->
+    <a href="main.html" class="back-home">Back to Home</a>
+
+    <div class="container" id="stepContainer">
+        <h2 id="title">Welcome to Your Virtual Interview</h2>
+        <p id="description">Click start to begin your interview journey.</p>
+        <button onclick="nextStep()">Start</button>
+    </div>
+    
+    <div class="container hidden" id="companySelection">
+        <h2>Company Selection</h2>
+        <p>Choose a company to simulate your interview.</p>
+        <select>
+            <option>Google</option>
+            <option>Amazon</option>
+            <option>Microsoft</option>
+        </select>
+        <button onclick="nextStep()">Confirm</button>
+    </div>
+
+    <div class="container hidden" id="loginSignup">
+        <h2>Login/Sign Up</h2>
+        <p>Enter your credentials to proceed.</p>
+        <input type='text' placeholder='Username' required>
+        <input type='email' placeholder='Email' required>
+        <input type='password' placeholder='Password' required>
+        <button onclick="nextStep()">Login</button>
+    </div>
+
+    <div class="container hidden" id="interviewSetup">
+        <h2>Interview Setup</h2>
+        <p>Set up your interview preferences.</p>
+        <input type='date' required>
+        <select>
+            <option>Technical</option>
+            <option>HR</option>
+        </select>
+        <button onclick="nextStep()">Schedule</button>
+    </div>
+
+    <div class="container hidden" id="waitingRoom">
+        <h2>Virtual Waiting Room</h2>
+        <p>Get ready! Your interview is about to begin.</p>
+        <button onclick="nextStep()">Next</button>
+    </div>
+
+    <div class="container hidden" id="mockInterview">
+        <h2>Mock Interview</h2>
+        <p>Answer the questions as if in a real interview.</p>
+        <form>
+            <p>Why should we hire you?</p>
+            <textarea required></textarea>
+            <p>What are your strengths and weaknesses?</p>
+            <textarea required></textarea>
+            <p>Describe a challenging situation at work and how you handled it.</p>
+            <textarea required></textarea>
+            <p>Where do you see yourself in five years?</p>
+            <textarea required></textarea>
+            <button type='button' onclick='nextStep()'>Submit Answers</button>
+        </form>
+    </div>
+
+    <div class="container hidden" id="interviewFeedback">
+        <h2>Interview Feedback</h2>
+        <p>Your answers were analyzed.</p>
+        <button onclick="nextStep()">View Feedback</button>
+    </div>
+
+    <div class="container hidden" id="finalCheck">
+        <h2>Final Readiness Check</h2>
+        <p>Are you ready for a real interview?</p>
+        <button onclick="restart()">No, Review Again</button>
+        <button onclick="endProcess()">Yes, I am Ready</button>
+    </div>
+
+    <div class="container hidden" id="progressContainer">
+        <h2>Student Progress</h2>
+
+        <div class="student-details">
+            <h3>Student Details</h3>
+            <p><strong>Name:</strong> <span id="student-name">N/A</span></p>
+            <p><strong>Email:</strong> <span id="student-email">N/A</span></p>
+            <p><strong>Phone:</strong> <span id="student-phone">N/A</span></p>
+            <p><strong>Course:</strong> <span id="student-course">N/A</span></p>
+        </div>
+
+        <div class="progress-section">
+            <h3>Mock Interview Progress</h3>
+            <p><strong>Total Tests Given:</strong> <span id="total-tests">0</span></p>
+            <p><strong>Average Score:</strong> <span id="average-score">0%</span></p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="tests-list">
+            <h3>Tests Given</h3>
+            <ul id="tests-ul">
+                <li>No tests taken yet.</li>
+            </ul>
+        </div>
+
+        <div class="graph-container">
+            <h3>Progress Graph</h3>
+            <canvas id="progressChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const steps = ["stepContainer", "companySelection", "loginSignup", "interviewSetup", "waitingRoom", "mockInterview", "interviewFeedback", "finalCheck", "progressContainer"];
+
+        function nextStep() {
+            document.getElementById(steps[currentStep]).classList.add("hidden");
+            currentStep++;
+            document.getElementById(steps[currentStep]).classList.remove("hidden");
+            if (steps[currentStep] === "progressContainer") {
+                loadProgress();
+            }
+        }
+
+        function restart() {
+            document.getElementById(steps[currentStep]).classList.add("hidden");
+            currentStep = 3;
+            document.getElementById(steps[currentStep]).classList.remove("hidden");
+        }
+
+        function endProcess() {
+            // Calculate score based on form submission (simple example)
+            let score = Math.floor(Math.random() * 100) + 1; // Random score for demo
+
+            // Store mock interview data
+            let mockInterviews = JSON.parse(localStorage.getItem('mockInterviews')) || [];
+            let testData = {
+                date: new Date().toLocaleDateString(),
+                score: score
+            };
+            mockInterviews.push(testData);
+            localStorage.setItem('mockInterviews', JSON.stringify(mockInterviews));
+
+            document.getElementById(steps[currentStep]).classList.add("hidden");
+            currentStep++;
+            document.getElementById(steps[currentStep]).classList.remove("hidden");
+            loadProgress();
+        }
+
+        function loadProgress() {
+            // Load student details from localStorage
+            document.getElementById('student-name').innerText = localStorage.getItem('name') || 'N/A';
+            document.getElementById('student-email').innerText = localStorage.getItem('email') || 'N/A';
+            document.getElementById('student-phone').innerText = localStorage.getItem('phone') || 'N/A';
+            document.getElementById('student-course').innerText = localStorage.getItem('selectedCourse') || 'N/A';
+
+            // Load mock interview data (assuming stored as JSON array in localStorage)
+            let mockInterviews = JSON.parse(localStorage.getItem('mockInterviews')) || [];
+            let totalTests = mockInterviews.length;
+            document.getElementById('total-tests').innerText = totalTests;
+
+            let testsUl = document.getElementById('tests-ul');
+            testsUl.innerHTML = '';
+
+            if (totalTests > 0) {
+                let totalScore = 0;
+                let scores = [];
+                mockInterviews.forEach((test, index) => {
+                    totalScore += test.score || 0;
+                    scores.push(test.score || 0);
+                    let li = document.createElement('li');
+                    li.innerText = `Test ${index + 1}: Date - ${test.date || 'N/A'}, Score - ${test.score || 0}%`;
+                    testsUl.appendChild(li);
+                });
+                let averageScore = Math.round(totalScore / totalTests);
+                document.getElementById('average-score').innerText = averageScore + '%';
+                document.getElementById('progress-fill').style.width = averageScore + '%';
+
+                // Draw graph
+                drawGraph(scores);
+            } else {
+                let li = document.createElement('li');
+                li.innerText = 'No tests taken yet.';
+                testsUl.appendChild(li);
+                document.getElementById('average-score').innerText = '0%';
+                document.getElementById('progress-fill').style.width = '0%';
+            }
+        }
+
+        function drawGraph(scores) {
+            const canvas = document.getElementById('progressChart');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 40;
+            const graphWidth = width - 2 * padding;
+            const graphHeight = height - 2 * padding;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw axes
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, height - padding);
+            ctx.lineTo(width - padding, height - padding);
+            ctx.stroke();
+
+            // Draw labels
+            ctx.fillText('Tests', width / 2, height - 10);
+            ctx.save();
+            ctx.translate(10, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Score (%)', 0, 0);
+            ctx.restore();
+
+            if (scores.length > 0) {
+                const maxScore = 100;
+                const stepX = graphWidth / (scores.length - 1 || 1);
+                const stepY = graphHeight / maxScore;
+
+                ctx.beginPath();
+                ctx.moveTo(padding, height - padding - scores[0] * stepY);
+                for (let i = 1; i < scores.length; i++) {
+                    ctx.lineTo(padding + i * stepX, height - padding - scores[i] * stepY);
+                }
+                ctx.strokeStyle = '#4caf50';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Draw points
+                ctx.fillStyle = '#4caf50';
+                scores.forEach((score, i) => {
+                    const x = padding + i * stepX;
+                    const y = height - padding - score * stepY;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                });
+            }
+        }
+    </script>
+</body>
+</html>

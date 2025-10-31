@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Professional Interview App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    body {
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #2c3e50;
+      padding: 15px 20px;
+      color: white;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      display: flex;
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      margin-right: 15px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+      padding: 8px 12px;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      background: #34495e;
+      border-radius: 5px;
+    }
+
+    /* Right-Side Dropdown */
+    .menu-icon {
+      font-size: 24px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .dropdown {
+      position: absolute;
+      right: 20px;
+      top: 60px;
+      background: white;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+      display: none;
+      flex-direction: column;
+      z-index: 11;
+    }
+
+    .dropdown a {
+      text-decoration: none;
+      color: black;
+      padding: 10px 15px;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .dropdown a:hover {
+      background: #ddd;
+    }
+
+    /* Tagline */
+    .tagline-container {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      padding: 20px;
+      background: #27ae60;
+      color: white;
+      margin-top: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Background Image After Tagline */
+    .background-banner {
+      width: 100%;
+      height: 80%;
+      overflow: hidden;
+      position: relative;
+      margin-top: 20px;
+    }
+
+    .background-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Progress Section Styles */
+    .progress-container {
+      width: 80%;
+      margin: 50px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+    }
+
+    .progress-container h2 {
+      color: #333;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 2em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .student-details {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      text-align: left;
+      display: inline-block;
+      background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+      padding: 15px;
+      border-radius: 10px;
+      color: white;
+    }
+
+    .student-details p {
+      margin: 25px 0;
+      font-weight: bold;
+    }
+
+    .progress-section {
+      margin-top: 20px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background: linear-gradient(90deg, #ddd 0%, #bbb 100%);
+      border-radius: 10px;
+      overflow: hidden;
+      height: 30px;
+      margin: 10px 0;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+      width: 0%;
+      transition: width 1s ease-in-out;
+    }
+
+    .tests-list {
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .tests-list ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .tests-list li {
+      background: linear-gradient(45deg, #a8edea 0%, #fed6e3 100%);
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 5px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .graph-container {
+      margin-top: 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    canvas {
+      border: 2px solid #ff6b6b;
+      background: white;
+      border-radius: 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        background: #2c3e50;
+        top: 60px;
+        left: 10px;
+        width: 80px;
+        border-radius: 5px;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .sidebar.show {
+        display: flex;
+      }
+
+      .menu-icon {
+        display: block;
+      }
+
+      .progress-container {
+        width: 95%;
+      }
+
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <!-- Left Sidebar Menu -->
+    <ul class="sidebar">
+      <li><a href="main.html">Home</a></li>
+      <li><a href="lo.html">Login</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="company.html">Company</a></li>
+      <li><a href="setup.html">Setup</a></li>
+      <li><a href="mock.html">Mock Interview</a></li>
+      <li><a href="feed.html">Feedback</a></li>
+    </ul>
+
+    <!-- Right-Side Dropdown Menu -->
+    <div class="menu-icon" onclick="toggleDropdown()">☰</div>
+    <div class="dropdown" id="dropdownMenu">
+      <a href="profile.html">Profile</a>
+      <a href="progress.html">Progress</a>
+      <a href="course.html">Courses</a>
+      <a href="term.html">Terms & Conditions</a>
+      <!-- <a href="settings.html">Settings</a> -->
+      <a href="#" onclick="signOut()">Sign Out</a>
+    </div>
+  </nav>
+
+  <!-- Tagline -->
+  <div class="tagline-container">
+    Turn <span style="color: yellow;">Nerves</span> into <span style="color: yellow;">Confidence</span>, 
+    Dreams into <span style="color: yellow;">Reality</span>.
+  </div>
+
+  <!-- Background Image After Tagline -->
+  <div class="background-banner">
+    <img src="../Images/3.jpg" alt="Motivational Banner" />
+  </div>
+
+  <!-- Progress Section -->
+  <div class="progress-container">
+    <h2>Student Progress</h2>
+
+    <div class="student-details">
+      <h3>Student Details</h3>
+      <p><strong>Name:</strong> <span id="student-name">N/A</span></p>
+      <p><strong>Email:</strong> <span id="student-email">N/A</span></p>
+      <p><strong>Phone:</strong> <span id="student-phone">N/A</span></p>
+      <p><strong>Course:</strong> <span id="student-course">N/A</span></p>
+    </div>
+
+    <div class="progress-section">
+      <h3>Mock Interview Progress</h3>
+      <p><strong>Total Tests Given:</strong> <span id="total-tests">0</span></p>
+      <p><strong>Average Score:</strong> <span id="average-score">0%</span></p>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="tests-list">
+      <h3>Tests Given</h3>
+      <ul id="tests-ul">
+        <li>No tests taken yet.</li>
+      </ul>
+    </div>
+
+    <div class="graph-container">
+      <h3>Progress Graph</h3>
+      <canvas id="progressChart" width="400" height="200"></canvas>
+    </div>
+  </div>
+
+  <script>
+    function toggleDropdown() {
+      const dropdown = document.getElementById("dropdownMenu");
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    }
+
+    function signOut() {
+      alert("Signing Out...");
+      window.location.href = "lo.html";
+    }
+
+    function loadProgress() {
+      // Load student details from localStorage
+      document.getElementById('student-name').innerText = localStorage.getItem('name') || 'N/A';
+      document.getElementById('student-email').innerText = localStorage.getItem('email') || 'N/A';
+      document.getElementById('student-phone').innerText = localStorage.getItem('phone') || 'N/A';
+      document.getElementById('student-course').innerText = localStorage.getItem('selectedCourse') || 'N/A';
+
+      // Load mock interview data (assuming stored as JSON array in localStorage)
+      let mockInterviews = JSON.parse(localStorage.getItem('mockInterviews')) || [];
+
+      // If no data, generate random data for demonstration
+      if (mockInterviews.length === 0) {
+        const numTests = Math.floor(Math.random() * 5) + 3; // 3 to 7 tests
+        for (let i = 0; i < numTests; i++) {
+          const score = Math.floor(Math.random() * 51) + 50; // 50-100
+          const date = new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toLocaleDateString(); // Random date in last 30 days
+          mockInterviews.push({ score, date });
+        }
+        localStorage.setItem('mockInterviews', JSON.stringify(mockInterviews));
+      }
+
+      let totalTests = mockInterviews.length;
+      document.getElementById('total-tests').innerText = totalTests;
+
+      let testsUl = document.getElementById('tests-ul');
+      testsUl.innerHTML = '';
+
+      if (totalTests > 0) {
+        let totalScore = 0;
+        let scores = [];
+        mockInterviews.forEach((test, index) => {
+          totalScore += test.score || 0;
+          scores.push(test.score || 0);
+          let li = document.createElement('li');
+          li.innerText = `Test ${index + 1}: Date - ${test.date || 'N/A'}, Score - ${test.score || 0}%`;
+          testsUl.appendChild(li);
+        });
+        let averageScore = Math.round(totalScore / totalTests);
+        document.getElementById('average-score').innerText = averageScore + '%';
+        document.getElementById('progress-fill').style.width = averageScore + '%';
+
+        // Draw graph
+        drawGraph(scores);
+      } else {
+        let li = document.createElement('li');
+        li.innerText = 'No tests taken yet.';
+        testsUl.appendChild(li);
+        document.getElementById('average-score').innerText = '0%';
+        document.getElementById('progress-fill').style.width = '0%';
+      }
+    }
+
+    function drawGraph(scores) {
+      const canvas = document.getElementById('progressChart');
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      const padding = 40;
+      const graphWidth = width - 2 * padding;
+      const graphHeight = height - 2 * padding;
+
+      // Clear canvas
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw axes
+      ctx.beginPath();
+      ctx.moveTo(padding, padding);
+      ctx.lineTo(padding, height - padding);
+      ctx.lineTo(width - padding, height - padding);
+      ctx.stroke();
+
+      // Draw labels with visible text color
+      ctx.fillStyle = '#000'; // Black color for visibility
+      ctx.fillText('Tests', width / 2, height - 10);
+      ctx.save();
+      ctx.translate(10, height / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText('Score (%)', 0, 0);
+      ctx.restore();
+
+      if (scores.length > 0) {
+        const maxScore = 100;
+        const stepX = graphWidth / (scores.length - 1 || 1);
+        const stepY = graphHeight / maxScore;
+
+        ctx.beginPath();
+        ctx.moveTo(padding, height - padding - scores[0] * stepY);
+        for (let i = 1; i < scores.length; i++) {
+          ctx.lineTo(padding + i * stepX, height - padding - scores[i] * stepY);
+        }
+        ctx.strokeStyle = '#4caf50';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Draw points
+        ctx.fillStyle = '#4caf50';
+        scores.forEach((score, i) => {
+          const x = padding + i * stepX;
+          const y = height - padding - score * stepY;
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, 2 * Math.PI);
+          ctx.fill();
+        });
+      }
+    }
+
+    window.onload = function() {
+      loadProgress();
+    };
+  </script>
+
+</body>
+</html>
